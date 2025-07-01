@@ -7,6 +7,7 @@ const path = require("path");
 dotenv.config(); // Load .env variables
 
 const app = express();
+const PORT = process.env.PORT || 5000; // ✅ This is the key line
 app.use(express.json());
 app.use(cors());
 
