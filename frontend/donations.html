@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Donations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff7e6;
+      padding: 20px;
+      color: #333;
+    }
+
+    h2 {
+      color: #d35400;
+      text-align: center;
+    }
+
+    .donation-card {
+      background: #fff;
+      border-left: 6px solid #f39c12;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 15px 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    .donation-card strong {
+      color: #b03a2e;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .buttons button {
+      background-color: #e67e22;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      margin: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #ca6f1e;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      .donation-card {
+        font-size: 15px;
+        padding: 12px;
+      }
+
+      .buttons button {
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🪔 All Donations</h2>
+
+  <div id="donationsList"></div>
+
+  <div class="buttons">
+    <button onclick="logout()">Logout</button>
+    <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please login first.");
+      window.location.href = "login.html";
+    } else {
+      fetch("http://localhost:5000/api/donation/all", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("donationsList");
+        data.forEach(d => {
+          const card = document.createElement("div");
+          card.className = "donation-card";
+          card.innerHTML = `
+            <p><strong>Donor:</strong> ${d.donor}</p>
+            <p><strong>Amount:</strong> ₹${d.amount}</p>
+            <p><strong>Purpose:</strong> ${d.purpose || "-"}</p>
+            <p><strong>Date:</strong> ${new Date(d.date).toLocaleString()}</p>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(() => {
+        alert("Failed to load donations.");
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

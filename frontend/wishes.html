@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ganesh Chaturthi Wishes Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #ffebee, #ffe0b2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      color: #d84315;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px 16px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 2px solid #ff6f00;
+      margin-bottom: 20px;
+      width: 250px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 1em;
+      border: none;
+      background: #ff6f00;
+      color: white;
+      border-radius: 10px;
+      margin: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e65100;
+    }
+
+    #card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin-top: 20px;
+      min-width: 280px;
+      max-width: 360px;
+    }
+
+    #greetingText {
+      font-size: 1.4em;
+      color: #4e342e;
+      margin-top: 10px;
+    }
+
+    .ganesha {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Ganesh Chaturthi Wishes Generator</h1>
+
+  <input type="text" id="nameInput" placeholder="Enter your name" />
+  <br />
+  <button onclick="generateWishes()">Generate Wish</button>
+  <button onclick="downloadImage()">📥 Download</button>
+
+  <div id="card" style="display:none;">
+    <div class="ganesha">🙏🐘</div>
+    <div id="greetingText">Happy Ganesh Chaturthi!</div>
+  </div>
+
+  <script>
+    function generateWishes() {
+      const name = document.getElementById("nameInput").value.trim();
+      const greeting = document.getElementById("greetingText");
+      const card = document.getElementById("card");
+
+      if (name === "") {
+        alert("Please enter your name first!");
+        return;
+      }
+
+      greeting.innerHTML = `🎉 Happy Ganesh Chaturthi, <strong>${name}</strong>!<br>May Lord Ganesha bless you with happiness & success. 🙏`;
+      card.style.display = "block";
+    }
+
+    function downloadImage() {
+      const card = document.getElementById("card");
+      html2canvas(card).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "ganesha_wish.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+
+</body>
+</html>

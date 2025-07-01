@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Expense - Ganesha Festival</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff9e6;
+      color: #333;
+      padding: 40px 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #c0392b;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      background-color: #e67e22;
+      color: white;
+      font-size: 16px;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #d35400;
+    }
+
+    .logout-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background-color: #2c3e50;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🧾 Add New Expense</h2>
+
+  <form id="expenseForm">
+    <input type="text" id="item" placeholder="Expense Item (e.g., Lights)" required />
+    <input type="number" id="cost" placeholder="Cost (₹)" required />
+    <input type="text" id="reason" placeholder="Reason (optional)" />
+    <button type="submit">Add Expense</button>
+  </form>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
+
+  <script>
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first.");
+      window.location.href = "login.html";
+    }
+
+    const expenseForm = document.getElementById("expenseForm");
+    if (expenseForm) {
+      expenseForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const item = document.getElementById("item").value;
+        const cost = document.getElementById("cost").value;
+        const reason = document.getElementById("reason").value;
+
+        try {
+          const res = await fetch("http://localhost:5000/api/expense/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({ item, cost, reason }),
+          });
+
+          const data = await res.json();
+          alert(data.message || data.error);
+          if (res.ok) expenseForm.reset();
+        } catch (err) {
+          alert("Failed to add expense.");
+        }
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

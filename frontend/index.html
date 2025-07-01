@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome - Ganesha Festival</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  
+  <!-- AOS Animation -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #fff4e6, #ffe0b2);
+      color: #4e2600;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ganesha-img {
+      width: 280px;
+      max-width: 90%;
+      animation: zoomIn 8s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 10px #f57c00);
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.07); }
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin: 25px 0 10px;
+      color: #bf360c;
+    }
+
+    p {
+      font-size: 1.2em;
+      max-width: 600px;
+      color: #5d4037;
+    }
+
+    .btn-group {
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-group button {
+      background-color: #d84315;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-group button:hover {
+      background-color: #bf360c;
+    }
+
+    #musicToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ff7043;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      background-color: #ffccbc;
+      position: relative;
+      z-index: 2;
+    }
+
+    .floating-diyas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .diya {
+      position: absolute;
+      width: 40px;
+      animation: floatUp 8s linear infinite;
+      bottom: -60px;
+      opacity: 0.9;
+    }
+
+    .diya:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .diya:nth-child(2) { left: 30%; animation-delay: 2s; }
+    .diya:nth-child(3) { left: 50%; animation-delay: 4s; }
+    .diya:nth-child(4) { left: 70%; animation-delay: 1s; }
+    .diya:nth-child(5) { left: 90%; animation-delay: 3s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    .countdown-section {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fff3e0;
+  color: #d84315;
+}
+
+#countdown {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 2em;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+#countdown div {
+  background: #ffccbc;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 100px;
+  transition: box-shadow 0.5s ease;
+  animation: pulse 2s infinite;
+}
+
+
+#countdown small {
+  display: block;
+  font-size: 0.5em;
+  color: #6d4c41;
+  margin-top: 8px;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating Diyas -->
+  <div class="floating-diyas">
+    <img src="assets\images\diya.jpg" class="diya" />
+    <img src="assets\images\diya.jpg" class="diya" />
+    <img src="assets\images\diya.jpg" class="diya" />
+    <img src="assets\images\diya.jpg" class="diya" />
+    <img src="assets\images\diya.jpg" class="diya" />
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="assets\audio\Ganesh-Anthem.mp3" type="audio/mp3" />
+    Your browser does not support the audio element.
+  </audio>
+  <button id="musicToggle">🔈</button>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="assets\images\ganesh.png" alt="Lord Ganesha" class="ganesha-img" data-aos="zoom-in" />
+    <h1 data-aos="fade-up">🪔 Celebrate Ganesha Chaturthi like never before!</h1>
+    <p data-aos="fade-up" data-aos-delay="300">
+      Track donations, view events, and join your community’s celebration with devotion and joy!
+    </p>
+
+    <div class="btn-group" data-aos="fade-up" data-aos-delay="500">
+      <div class="nav-buttons">
+    <button onclick="location.href='index.html'">⬅ Back</button>
+    <button onclick="location.href='landing2.html'">Next ➡</button>
+    <button onclick="location.href='login.html'">🎯 Skip</button>
+</div>
+
+    </div>
+    
+  </section>
+  <section class="countdown-section" id="countdownSection">
+  <h2>📿 Countdown to Visarjan Day</h2>
+  <div id="countdown">
+    <div><span id="days">00</span><small>Days</small></div>
+    <div><span id="hours">00</span><small>Hours</small></div>
+    <div><span id="minutes">00</span><small>Minutes</small></div>
+    <div><span id="seconds">00</span><small>Seconds</small></div>
+  </div>
+</section>
+
+
+  <footer>
+    © 2025 Ganesha Festival | Made with ❤️ by Kumbar Bedi Street Boys
+  </footer>
+
+  <!-- AOS Animation JS -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    const music = document.getElementById("bgMusic");
+    const toggleBtn = document.getElementById("musicToggle");
+    let isMuted = true;
+
+    // Mute initially (due to browser autoplay policy)
+    music.muted = isMuted;
+
+    toggleBtn.onclick = () => {
+      if (music.paused) {
+        music.play(); // play after interaction
+      }
+      isMuted = !isMuted;
+      music.muted = isMuted;
+      toggleBtn.textContent = isMuted ? "🔇" : "🔈";
+    };
+
+  const visarjanDate = new Date("2025-09-14T18:00:00"); // Change this to your actual visarjan date
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = visarjanDate - now;
+
+    const countdownDiv = document.getElementById("countdown");
+
+    if (distance <= 0) {
+      countdownDiv.innerHTML = "🎉 Visarjan Day is Here!";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
+
+    document.getElementById("days").innerText = String(days).padStart(2, "0");
+    document.getElementById("hours").innerText = String(hours).padStart(2, "0");
+    document.getElementById("minutes").innerText = String(minutes).padStart(2, "0");
+    document.getElementById("seconds").innerText = String(seconds).padStart(2, "0");
+
+    // 🔥 Glow Effect Increases as Visarjan Approaches
+    const allBoxes = countdownDiv.querySelectorAll("div");
+    let glowIntensity = 5;
+
+    if (days <= 10) glowIntensity = 10;
+    if (days <= 5) glowIntensity = 15;
+    if (days <= 2) glowIntensity = 20;
+    if (days <= 1) glowIntensity = 25;
+
+    allBoxes.forEach((box) => {
+      box.style.boxShadow = `0 0 ${glowIntensity}px ${glowIntensity / 2}px orange`;
+    });
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+
+
+  </script>
+</body>
+</html>
