@@ -114,7 +114,7 @@
     // Load Events
     async function loadEvents() {
       try {
-        const res = await fetch("http://localhost:5000/api/event/all", {
+        const res = await fetch("https://ganesha-backend.onrender.com/api/event/all", {
           headers: { Authorization: "Bearer " + token },
         });
 
