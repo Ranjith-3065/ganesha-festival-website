@@ -91,7 +91,7 @@
       alert("Please login first.");
       window.location.href = "login.html";
     } else {
-      fetch("http://localhost:5000/api/expense/all", {
+      fetch("https://ganesha-backend.onrender.com/api/expense/all", {
         headers: {
           Authorization: "Bearer " + token,
         },

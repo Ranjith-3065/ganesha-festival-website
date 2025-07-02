@@ -201,7 +201,7 @@
         adminDiv.style.gap = "15px";
       }
 
-      fetch("http://localhost:5000/api/summary", {
+      fetch("https://ganesha-backend.onrender.com/api/summary", {
         headers: { Authorization: "Bearer " + token },
       })
       .then((res) => res.json())

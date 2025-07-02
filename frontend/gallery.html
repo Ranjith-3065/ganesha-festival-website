@@ -279,7 +279,7 @@
       formData.append("image", imageFile);
       formData.append("caption", caption);
 
-      fetch("http://localhost:5000/api/gallery/upload", {
+      fetch("https://ganesha-backend.onrender.com/api/gallery/upload", {
         method: "POST",
         body: formData
       })

@@ -107,7 +107,7 @@
         const reason = document.getElementById("reason").value;
 
         try {
-          const res = await fetch("http://localhost:5000/api/expense/add", {
+          const res = await fetch("https://ganesha-backend.onrender.com/api/expense/add", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
