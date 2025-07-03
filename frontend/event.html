@@ -161,7 +161,7 @@
               "Content-Type": "application/json",
               Authorization: "Bearer " + token,
             },
-            body: JSON.stringify({ title, datetime, description }),
+            body: JSON.stringify({ title, date, time, description }),
           });
 
           const data = await res.json();
