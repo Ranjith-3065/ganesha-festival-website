@@ -257,19 +257,26 @@
 
     // Load saved theme on page load
     window.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-      }
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+  }
 
-      fetch("https://ganesha-backend.onrender.com/api/gallery/images")
-        .then(res => res.json())
-        .then(data => {
-          if (!data.success || !Array.isArray(data.images)) return;
-          allImages = data.images;
-          sortAndFilter();
-        })
-        .catch(err => console.error("Failed to load gallery:", err));
+  const loader = document.getElementById("loading");
+  loader.style.display = "block";
+
+  fetch("https://ganesha-backend.onrender.com/api/gallery/images")
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success || !Array.isArray(data.images)) return;
+      allImages = data.images;
+      sortAndFilter();
+    })
+    .catch(err => console.error("Failed to load gallery:", err))
+    .finally(() => {
+      loader.style.display = "none";
     });
+});
+
 
     document.getElementById("uploadForm").addEventListener("submit", function (e) {
       e.preventDefault();
