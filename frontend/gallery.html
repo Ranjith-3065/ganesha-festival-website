@@ -163,10 +163,6 @@
     </select>
     <button class="toggle-theme" onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
-  <div id="loading" style="text-align: center; font-size: 18px; color: #ff6f00;">
-  ⏳ Loading gallery...
-</div>
-<div class="gallery" id="galleryGrid"></div>
 
   <div class="gallery" id="galleryGrid"></div>
 
@@ -261,26 +257,19 @@
 
     // Load saved theme on page load
     window.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-  }
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+      }
 
-  const loader = document.getElementById("loading");
-  loader.style.display = "block";
-
-  fetch("https://ganesha-backend.onrender.com/api/gallery/images")
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success || !Array.isArray(data.images)) return;
-      allImages = data.images;
-      sortAndFilter();
-    })
-    .catch(err => console.error("Failed to load gallery:", err))
-    .finally(() => {
-      loader.style.display = "none";
+      fetch("https://ganesha-backend.onrender.com/api/gallery/images")
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success || !Array.isArray(data.images)) return;
+          allImages = data.images;
+          sortAndFilter();
+        })
+        .catch(err => console.error("Failed to load gallery:", err));
     });
-});
-
 
     document.getElementById("uploadForm").addEventListener("submit", function (e) {
       e.preventDefault();
