@@ -180,12 +180,12 @@
         item.className = "gallery-item";
 
         const anchor = document.createElement("a");
-        anchor.href = "http://localhost:5000" + img.url;
+        anchor.href = "https://ganesha-backend.onrender.com";
         anchor.setAttribute("data-lightbox", "festival");
         anchor.setAttribute("data-title", img.caption);
 
         const image = document.createElement("img");
-        image.src = "http://localhost:5000" + img.url;
+        image.src = "https://ganesha-backend.onrender.com";
         image.alt = img.caption;
 
         const captionDiv = document.createElement("div");
@@ -193,7 +193,7 @@
         captionDiv.textContent = img.caption || "";
 
         const downloadBtn = document.createElement("a");
-        downloadBtn.href = "http://localhost:5000" + img.url;
+        downloadBtn.href = "https://ganesha-backend.onrender.com";
         downloadBtn.className = "download-btn";
         downloadBtn.download = "";
         downloadBtn.textContent = "⬇️ Download";
@@ -202,7 +202,7 @@
         shareBtn.className = "share-btn";
         shareBtn.textContent = "🔗 Share";
         shareBtn.onclick = () => {
-          const shareUrl = "https://ganesha-backend.onrender.com" + img.url;
+          const shareUrl = "https://ganesha-backend.onrender.com";
           navigator.clipboard.writeText(shareUrl);
           alert("Copied to clipboard:\n" + shareUrl);
         };
