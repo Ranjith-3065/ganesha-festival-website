@@ -17,39 +17,48 @@
     </div>
   </div>
 
-  <script>
-    // Replace with your deployed backend URL
-    const BACKEND_URL = "https://ganesha-backend.onrender.com/api/gallery/getAllImages";
+ <script>
+  // Replace with your deployed backend URL
+  const BACKEND_URL = "https://ganesha-backend.onrender.com/api/gallery/getAllImages";
 
-    async function loadGallery() {
-      try {
-        const res = await fetch(BACKEND_URL);
-        const data = await res.json();
+  async function loadGallery() {
+    try {
+      const res = await fetch(BACKEND_URL);
+      const result = await res.json();
 
-        const gallery = document.getElementById('gallery');
-        gallery.innerHTML = '';
+      // Check if result is an object and contains array under `images`
+      const data = Array.isArray(result)
+        ? result
+        : Array.isArray(result.images)
+          ? result.images
+          : [];
 
-        data.reverse().forEach(image => {
-          const imgBlock = document.createElement('div');
-          imgBlock.className = "relative overflow-hidden rounded-lg shadow-md";
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
 
-          imgBlock.innerHTML = `
-            <a href="${image.imageUrl}" data-lightbox="gallery" data-title="${image.caption || 'Festival Moment'}">
-              <img src="${image.imageUrl}" alt="Festival Image" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 rounded-lg" />
-            </a>
-            <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-sm p-2">
-              ${image.caption || 'Festival Moment'}
-            </div>
-          `;
+      data.reverse().forEach(image => {
+        const imgBlock = document.createElement('div');
+        imgBlock.className = "relative overflow-hidden rounded-lg shadow-md";
 
-          gallery.appendChild(imgBlock);
-        });
-      } catch (error) {
-        console.error("Error loading images:", error);
-      }
+        imgBlock.innerHTML = `
+          <a href="${image.imageUrl}" data-lightbox="gallery" data-title="${image.caption || 'Festival Moment'}">
+            <img src="${image.imageUrl}" alt="Festival Image" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 rounded-lg" />
+          </a>
+          <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-sm p-2">
+            ${image.caption || 'Festival Moment'}
+          </div>
+        `;
+
+        gallery.appendChild(imgBlock);
+      });
+
+    } catch (error) {
+      console.error("Error loading images:", error);
     }
+  }
 
-    loadGallery();
-  </script>
+  loadGallery();
+</script>
+
 </body>
 </html>
