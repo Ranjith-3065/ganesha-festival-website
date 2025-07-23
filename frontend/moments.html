@@ -17,25 +17,31 @@
     </div>
   </div>
 
- <script>
+<script>
   const BACKEND_URL = "https://ganesha-backend.onrender.com/api/gallery/getAllImages";
+  const IMAGE_BASE_URL = "https://ganesha-backend.onrender.com";
 
   async function loadGallery() {
     try {
       const res = await fetch(BACKEND_URL);
-      const data = await res.json(); // data is { success: true, images: [...] }
+      const data = await res.json(); // Expecting { success: true, images: [...] }
 
       const gallery = document.getElementById('gallery');
       gallery.innerHTML = '';
 
-      // Access the images array and reverse it
+      // Check if images is an array before proceeding
+      if (!Array.isArray(data.images)) {
+        throw new Error("Invalid image data format");
+      }
+
+      // Reverse to show newest images first
       data.images.reverse().forEach(image => {
         const imgBlock = document.createElement('div');
         imgBlock.className = "relative overflow-hidden rounded-lg shadow-md";
 
         imgBlock.innerHTML = `
-          <a href="${image.url}" data-lightbox="gallery" data-title="${image.caption || 'Festival Moment'}">
-            <img src="${image.url}" alt="Festival Image" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 rounded-lg" />
+          <a href="${IMAGE_BASE_URL}${image.url}" data-lightbox="gallery" data-title="${image.caption || 'Festival Moment'}">
+            <img src="${IMAGE_BASE_URL}${image.url}" alt="Festival Image" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 rounded-lg" />
           </a>
           <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-sm p-2">
             ${image.caption || 'Festival Moment'}
@@ -51,6 +57,7 @@
 
   loadGallery();
 </script>
+
 
 
 </body>
