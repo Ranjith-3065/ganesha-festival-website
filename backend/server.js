@@ -17,10 +17,13 @@ app.use(cors({
 
 // Serve static files from /public/gallery folder
 app.use('/gallery', express.static(path.join(__dirname, 'public/gallery'), {
-  setHeaders: (res, path) => {
-    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'); // 👈 important
+  setHeaders: (res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');  // Optional
   }
 }));
+
 
 
 // Import & Use routes
