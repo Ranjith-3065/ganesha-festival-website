@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Festival Moments Wall</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-4xl font-bold text-center mb-8 text-red-600">🎉 Festival Moments Wall</h1>
+
+    <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Images will be loaded here -->
+    </div>
+  </div>
+
+  <script>
+    // Replace with your deployed backend URL
+    const BACKEND_URL = "https://ganesha-backend.onrender.com/gallery/getAllImages";
+
+    async function loadGallery() {
+      try {
+        const res = await fetch(BACKEND_URL);
+        const data = await res.json();
+
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = '';
+
+        data.reverse().forEach(image => {
+          const imgBlock = document.createElement('div');
+          imgBlock.className = "relative overflow-hidden rounded-lg shadow-md";
+
+          imgBlock.innerHTML = `
+            <a href="${image.imageUrl}" data-lightbox="gallery" data-title="${image.caption || 'Festival Moment'}">
+              <img src="${image.imageUrl}" alt="Festival Image" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 rounded-lg" />
+            </a>
+            <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 text-white text-sm p-2">
+              ${image.caption || 'Festival Moment'}
+            </div>
+          `;
+
+          gallery.appendChild(imgBlock);
+        });
+      } catch (error) {
+        console.error("Error loading images:", error);
+      }
+    }
+
+    loadGallery();
+  </script>
+</body>
+</html>
