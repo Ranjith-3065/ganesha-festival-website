@@ -9,22 +9,10 @@ dotenv.config(); // Load .env variables
 const app = express();
 const PORT = process.env.PORT || 5000; // ✅ This is the key line
 app.use(express.json());
-app.use(cors({
-  origin: '*',  // Or your frontend domain like "https://ganesha-frontend.onrender.com"
-  methods: ['GET', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
-}));
+app.use(cors());
 
 // Serve static files from /public/gallery folder
-app.use('/gallery', express.static(path.join(__dirname, 'public/gallery'), {
-  setHeaders: (res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');  // Optional
-  }
-}));
-
-
+app.use('/gallery', express.static(path.join(__dirname, 'public/gallery')));
 
 // Import & Use routes
 const authRoutes = require("./routes/auth");
