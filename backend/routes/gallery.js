@@ -76,6 +76,22 @@ router.delete("/:filename", async (req, res) => {
 });
 
 
+// moments wall
+router.get("/getAllImages", async (req, res) => {
+  try {
+    const images = await Gallery.find().sort({ uploadedAt: -1 });
+
+    const imageList = images.map(img => ({
+      url: `/gallery/${img.filename}`,
+      filename: img.filename,
+      caption: img.caption
+    }));
+
+    res.json({ success: true, images: imageList });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch images" });
+  }
+});
 
 
 module.exports = router;
