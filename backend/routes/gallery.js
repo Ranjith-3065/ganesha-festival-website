@@ -75,5 +75,24 @@ router.delete("/:filename", async (req, res) => {
   }
 });
 
+// moments 
+// ✅ GET images only for 'moments.html' (can be filtered differently if needed)
+router.get('/moments', async (req, res) => {
+  try {
+    const images = await Gallery.find().sort({ uploadedAt: -1 }); // or use a filter if needed
+
+    const imageList = images.map(img => ({
+      url: `/gallery/${img.filename}`,
+      filename: img.filename,
+      caption: img.caption
+    }));
+
+    res.json({ success: true, images: imageList });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to load moments' });
+  }
+});
+
 
 module.exports = router;
