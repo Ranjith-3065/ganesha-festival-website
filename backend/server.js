@@ -10,10 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000; // ✅ This is the key line
 app.use(express.json());
 app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-  next();
-});
+
 
 // Serve static files from /public/gallery folder
 app.use('/gallery', express.static(path.join(__dirname, 'public/gallery')));
