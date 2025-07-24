@@ -62,7 +62,7 @@
   <script>
     const backendURL = 'https://ganesha-backend.onrender.com';
 
-    fetch(`${backendURL}/api/gallery`)
+    fetch(`${backendURL}/gallery`)  // <-- FIXED URL
       .then(response => response.json())
       .then(data => {
         if (data.success) {
