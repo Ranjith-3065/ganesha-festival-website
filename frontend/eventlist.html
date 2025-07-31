@@ -103,8 +103,7 @@
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Please login first.");
-      window.location.href = "login.html";
+      alert("Welcome to Events.");
     }
 
     fetch("https://ganesha-backend.onrender.com/api/event/all", {
