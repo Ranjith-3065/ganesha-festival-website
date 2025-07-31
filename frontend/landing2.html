@@ -27,6 +27,23 @@
       z-index: 0;
     }
 
+    /* Login button at top-left */
+    .login-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(45deg, #ff6f00, #ff8f00);
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 20;
+      transition: transform 0.3s ease;
+    }
+    .login-btn:hover { transform: scale(1.1); }
+
     .hero {
       display: flex;
       flex-direction: column;
@@ -66,7 +83,6 @@
       margin-top: 40px;
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
       gap: 15px;
     }
 
@@ -116,9 +132,12 @@
   <!-- Fireworks Canvas -->
   <canvas id="fireworksCanvas"></canvas>
 
+  <!-- Login button fixed at top-left -->
+  <button class="login-btn" onclick="location.href='login.html'">🎊 Login</button>
+
   <!-- Background Music -->
   <audio id="bgMusic" loop>
-    <source src="assets\audio\Ganesh-Anthem.mp3" type="audio/mp3" />
+    <source src="assets/audio/Ganesh-Anthem.mp3" type="audio/mp3" />
     Your browser does not support the audio element.
   </audio>
   <button id="musicToggle">🔈</button>
@@ -133,17 +152,15 @@
 
     <div class="btn-group" data-aos="fade-up" data-aos-delay="400">
       <button onclick="location.href='dashboard.html'">Next ➡</button>
-      <button onclick="location.href='login.html'">🎊 Login</button>
     </div>
   </section>
 
   <footer>
     © 2025 Ganesha Festival | Kumbar Bedi Street Devotees
   </footer>
-  <script src="language-switcher.js"></script>
-  <!-- AOS -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
+  <script src="language-switcher.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
   <!-- Fireworks Script -->
   <script>
@@ -208,23 +225,15 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
-  </script>
 
-  <!-- Music Toggle -->
-  <script>
+    // Music Toggle
     AOS.init();
-
     const music = document.getElementById("bgMusic");
     const toggleBtn = document.getElementById("musicToggle");
     let isMuted = true;
-
-    // Mute initially (due to browser autoplay policy)
     music.muted = isMuted;
-
     toggleBtn.onclick = () => {
-      if (music.paused) {
-        music.play(); // play after interaction
-      }
+      if (music.paused) { music.play(); }
       isMuted = !isMuted;
       music.muted = isMuted;
       toggleBtn.textContent = isMuted ? "🔇" : "🔈";
