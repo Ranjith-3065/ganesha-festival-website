@@ -26,17 +26,22 @@ const upload = multer({ storage });
 // ✅ Upload Image
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
+    const cloudinaryUrl = req.file?.path || req.file?.secure_url;
+    if (!cloudinaryUrl) {
+      return res.status(400).json({ success: false, message: "Cloudinary URL not found" });
+    }
+
     const newImage = new Gallery({
       filename: req.file.filename || Date.now().toString(),
       caption: req.body.caption,
-      url: req.file.path // Cloudinary permanent URL
+      url: cloudinaryUrl // ✅ Save correct Cloudinary URL
     });
 
     await newImage.save();
 
     res.json({
       success: true,
-      imageUrl: req.file.path,
+      imageUrl: cloudinaryUrl,
       caption: req.body.caption,
       filename: newImage.filename
     });
@@ -50,7 +55,14 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 router.get('/images', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
-    res.json({ success: true, images });
+
+    const imageList = images.map(img => ({
+      url: img.url,       // ✅ Cloudinary URL
+      filename: img.filename,
+      caption: img.caption
+    }));
+
+    res.json({ success: true, images: imageList });
   } catch (err) {
     console.error("Fetch Error:", err);
     res.status(500).json({ success: false, message: 'Failed to load gallery' });
@@ -64,7 +76,7 @@ router.delete("/:filename", async (req, res) => {
     if (!img) return res.status(404).json({ success: false, message: "Image not found" });
 
     // Extract public_id from Cloudinary URL
-    const publicId = img.url.split('/').slice(-1)[0].split('.')[0];
+    const publicId = img.url.split('/').pop().split('.')[0];
     await cloudinary.uploader.destroy(`ganesha_festival_gallery/${publicId}`);
 
     await Gallery.deleteOne({ filename: req.params.filename });
@@ -80,7 +92,14 @@ router.delete("/:filename", async (req, res) => {
 router.get('/moments', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
-    res.json({ success: true, images });
+
+    const imageList = images.map(img => ({
+      url: img.url,       // ✅ Cloudinary URL
+      filename: img.filename,
+      caption: img.caption
+    }));
+
+    res.json({ success: true, images: imageList });
   } catch (err) {
     console.error("Moments Fetch Error:", err);
     res.status(500).json({ success: false, message: 'Failed to load moments' });
