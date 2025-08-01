@@ -81,7 +81,7 @@ router.delete("/:filename", async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error("Delete Error:", err);
-    res.status(500).json({ success: false, message: "Delete failed" });
+    res.status(500).json({ success: false, message: "Delete Failed" });
   }
 });
 
