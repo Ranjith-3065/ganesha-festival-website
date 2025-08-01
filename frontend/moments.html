@@ -62,7 +62,7 @@
   <script>
     const backendURL = 'https://ganesha-backend.onrender.com';
 
-    fetch(`${backendURL}/api/gallery/moments`)  // <-- FIXED URL
+    fetch(`${backendURL}/api/gallery/moments`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -72,7 +72,7 @@
             imageBox.classList.add('image-box');
 
             const img = document.createElement('img');
-            img.src = `${backendURL}${image.url}`;
+            img.src = image.url;  // ✅ Cloudinary URL (no need to prefix backendURL)
             img.alt = image.caption || 'Festival Moment';
 
             const caption = document.createElement('div');
