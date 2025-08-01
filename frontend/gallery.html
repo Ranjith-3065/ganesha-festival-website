@@ -152,10 +152,10 @@
         deleteBtn.textContent = "🗑️ Delete";
         deleteBtn.onclick = () => {
           if (confirm("Are you sure you want to delete this image?")) {
-            fetch(`https://ganesha-backend.onrender.com/api/gallery/${img.filename}`, {
+            fetch(`https://ganesha-backend.onrender.com/api/gallery/${img.filename || ''}`, {
               method: "DELETE"
             })
-            .then(res => res.json())
+            .then(res => res.json().catch(() => ({ success: false })))
             .then(resp => {
               if (resp.success) {
                 alert("Image deleted!");
@@ -181,11 +181,11 @@
     function sortAndFilter() {
       const query = document.getElementById("searchInput").value.toLowerCase();
       const sortOrder = document.getElementById("sortSelect").value;
-      let filtered = allImages.filter(img => img.caption.toLowerCase().includes(query));
+      let filtered = allImages.filter(img => (img.caption || "").toLowerCase().includes(query));
       filtered.sort((a, b) =>
         sortOrder === "newest"
-          ? b.filename.localeCompare(a.filename)
-          : a.filename.localeCompare(b.filename)
+          ? (b.filename || '').localeCompare(a.filename || '')
+          : (a.filename || '').localeCompare(b.filename || '')
       );
       renderImages(filtered);
     }
@@ -201,7 +201,7 @@
       }
 
       fetch("https://ganesha-backend.onrender.com/api/gallery/images")
-        .then(res => res.json())
+        .then(res => res.json().catch(() => ({ success: false })))
         .then(data => {
           if (!data.success || !Array.isArray(data.images)) return;
           allImages = data.images;
@@ -220,7 +220,7 @@
         method: "POST",
         body: formData
       })
-      .then(res => res.json())
+      .then(res => res.json().catch(() => ({ success: false })))
       .then(data => {
         if (data.success) {
           alert("Image uploaded! Reloading...");
