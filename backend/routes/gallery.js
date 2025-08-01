@@ -5,37 +5,40 @@ const cloudinary = require('cloudinary').v2;
 const router = express.Router();
 const Gallery = require('../models/gallery');
 
-// Cloudinary Config
+// ✅ Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-// Cloudinary Storage
+// ✅ Cloudinary Storage
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "ganesha_festival_gallery",
     allowed_formats: ["jpg", "png", "jpeg"],
-    public_id: (req, file) => Date.now() + '-' + file.originalname.split('.')[0]
+    public_id: (req, file) =>
+      Date.now() + "-" + file.originalname.split(".")[0]
   }
 });
 
 const upload = multer({ storage });
 
-// Upload Image
+// ✅ Upload Image
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file || !req.file.path) {
       return res.status(400).json({ success: false, message: "Image upload failed" });
     }
 
+    const filename = req.file.filename || Date.now().toString();
+
     const newImage = new Gallery({
-      filename: req.file.filename || req.file.public_id,
-      publicId: req.file.filename || req.file.public_id, // ✅ store Cloudinary public_id
+      filename,
+      publicId: req.file.filename, // ✅ Store Cloudinary's filename
       caption: req.body.caption || "Untitled",
-      url: req.file.path // ✅ Cloudinary permanent URL
+      url: req.file.path // ✅ Permanent Cloudinary URL
     });
 
     await newImage.save();
@@ -48,37 +51,39 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     });
   } catch (err) {
     console.error("Upload Error:", err);
-    res.status(500).json({ success: false, message: 'Upload failed' });
+    res.status(500).json({ success: false, message: "Upload failed" });
   }
 });
 
-// Get Images
+// ✅ Get Images
 router.get('/images', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
+
     res.json({
       success: true,
       images: images.map(img => ({
-        url: img.url,
+        url: img.url || "https://via.placeholder.com/400x250?text=Image+Unavailable",
         filename: img.filename,
-        caption: img.caption || ""
+        caption: img.caption || "No caption"
       }))
     });
   } catch (err) {
     console.error("Fetch Error:", err);
-    res.status(500).json({ success: false, message: 'Failed to load gallery' });
+    res.status(500).json({ success: false, message: "Failed to load gallery" });
   }
 });
 
-// Delete Image
+// ✅ Delete Image
 router.delete("/:filename", async (req, res) => {
   try {
     const img = await Gallery.findOne({ filename: req.params.filename });
     if (!img) return res.status(404).json({ success: false, message: "Image not found" });
 
-    // Use publicId for Cloudinary delete
-    await cloudinary.uploader.destroy(`ganesha_festival_gallery/${img.publicId}`);
+    // ✅ Delete from Cloudinary using stored publicId
+    await cloudinary.uploader.destroy(img.publicId);
 
+    // ✅ Remove from MongoDB
     await Gallery.deleteOne({ filename: req.params.filename });
 
     res.json({ success: true });
@@ -88,21 +93,22 @@ router.delete("/:filename", async (req, res) => {
   }
 });
 
-// Moments
+// ✅ For moments.html
 router.get('/moments', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
+
     res.json({
       success: true,
       images: images.map(img => ({
-        url: img.url,
+        url: img.url || "https://via.placeholder.com/400x250?text=Image+Unavailable",
         filename: img.filename,
-        caption: img.caption || ""
+        caption: img.caption || "No caption"
       }))
     });
   } catch (err) {
     console.error("Moments Fetch Error:", err);
-    res.status(500).json({ success: false, message: 'Failed to load moments' });
+    res.status(500).json({ success: false, message: "Failed to load moments" });
   }
 });
 
