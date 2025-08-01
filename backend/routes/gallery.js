@@ -3,46 +3,47 @@ const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
 const router = express.Router();
-const Gallery = require('../models/gallery'); // MongoDB Model
+const Gallery = require('../models/gallery');
 
-// ✅ Configure Cloudinary
+// Cloudinary Config
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET
 });
 
-// ✅ Cloudinary Storage
+// Cloudinary Storage
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "ganesha_festival_gallery",
-    allowed_formats: ["jpg", "png", "jpeg"]
+    allowed_formats: ["jpg", "png", "jpeg"],
+    public_id: (req, file) => Date.now() + '-' + file.originalname.split('.')[0]
   }
 });
 
 const upload = multer({ storage });
 
-// ✅ Upload Image
+// Upload Image
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
-    const cloudinaryUrl = req.file?.path || req.file?.secure_url;
-    if (!cloudinaryUrl) {
-      return res.status(400).json({ success: false, message: "Cloudinary URL not found" });
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({ success: false, message: "Image upload failed" });
     }
 
     const newImage = new Gallery({
-      filename: req.file.filename || Date.now().toString(),
-      caption: req.body.caption,
-      url: cloudinaryUrl // ✅ Save correct Cloudinary URL
+      filename: req.file.filename || req.file.public_id,
+      publicId: req.file.filename || req.file.public_id, // ✅ store Cloudinary public_id
+      caption: req.body.caption || "Untitled",
+      url: req.file.path // ✅ Cloudinary permanent URL
     });
 
     await newImage.save();
 
     res.json({
       success: true,
-      imageUrl: cloudinaryUrl,
-      caption: req.body.caption,
+      imageUrl: req.file.path,
+      caption: newImage.caption,
       filename: newImage.filename
     });
   } catch (err) {
@@ -51,33 +52,32 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-// ✅ Get Images
+// Get Images
 router.get('/images', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
-
-    const imageList = images.map(img => ({
-      url: img.url,       // ✅ Cloudinary URL
-      filename: img.filename,
-      caption: img.caption
-    }));
-
-    res.json({ success: true, images: imageList });
+    res.json({
+      success: true,
+      images: images.map(img => ({
+        url: img.url,
+        filename: img.filename,
+        caption: img.caption || ""
+      }))
+    });
   } catch (err) {
     console.error("Fetch Error:", err);
     res.status(500).json({ success: false, message: 'Failed to load gallery' });
   }
 });
 
-// ✅ Delete Image
+// Delete Image
 router.delete("/:filename", async (req, res) => {
   try {
     const img = await Gallery.findOne({ filename: req.params.filename });
     if (!img) return res.status(404).json({ success: false, message: "Image not found" });
 
-    // Extract public_id from Cloudinary URL
-    const publicId = img.url.split('/').pop().split('.')[0];
-    await cloudinary.uploader.destroy(`ganesha_festival_gallery/${publicId}`);
+    // Use publicId for Cloudinary delete
+    await cloudinary.uploader.destroy(`ganesha_festival_gallery/${img.publicId}`);
 
     await Gallery.deleteOne({ filename: req.params.filename });
 
@@ -88,18 +88,18 @@ router.delete("/:filename", async (req, res) => {
   }
 });
 
-// ✅ For moments.html
+// Moments
 router.get('/moments', async (req, res) => {
   try {
     const images = await Gallery.find().sort({ uploadedAt: -1 });
-
-    const imageList = images.map(img => ({
-      url: img.url,       // ✅ Cloudinary URL
-      filename: img.filename,
-      caption: img.caption
-    }));
-
-    res.json({ success: true, images: imageList });
+    res.json({
+      success: true,
+      images: images.map(img => ({
+        url: img.url,
+        filename: img.filename,
+        caption: img.caption || ""
+      }))
+    });
   } catch (err) {
     console.error("Moments Fetch Error:", err);
     res.status(500).json({ success: false, message: 'Failed to load moments' });
