@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="google" content="notranslate">
   <title>Festival Moments Wall</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
@@ -16,7 +15,6 @@
       --caption-bg: #fff8e1;
       --footer-bg: #ffe0b2;
     }
-
     body.dark {
       --bg: #121212;
       --text: #fff;
@@ -25,7 +23,6 @@
       --caption-bg: #2c2c2c;
       --footer-bg: #333;
     }
-
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -33,7 +30,6 @@
       color: var(--text);
       transition: background 0.4s ease, color 0.4s ease;
     }
-
     header {
       text-align: center;
       padding: 20px;
@@ -41,26 +37,10 @@
       background: linear-gradient(to right, var(--accent), #ff8f00);
       color: white;
     }
-
     .controls, form {
       text-align: center;
       margin: 10px;
     }
-
-    .controls input, .controls select, .toggle-theme {
-      padding: 8px;
-      font-size: 16px;
-      margin: 8px;
-      border-radius: 6px;
-      border: none;
-    }
-
-    .toggle-theme {
-      background: var(--accent);
-      color: white;
-      cursor: pointer;
-    }
-
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -69,7 +49,6 @@
       max-width: 1200px;
       margin: auto;
     }
-
     .gallery-item {
       background: var(--card-bg);
       border-radius: 10px;
@@ -78,71 +57,33 @@
       display: flex;
       flex-direction: column;
       text-align: center;
-      transform: scale(1);
       transition: transform 0.3s ease;
     }
-
-    .gallery-item:hover {
-      transform: scale(1.03);
-    }
-
+    .gallery-item:hover { transform: scale(1.03); }
     .gallery-item img {
       width: 100%;
       height: 250px;
       object-fit: cover;
     }
-
     .caption {
       padding: 10px;
       background-color: var(--caption-bg);
-      font-size: 0.95em;
-      color: var(--text);
     }
-
     .gallery-item button, .gallery-item a.download-btn {
       margin: 5px auto;
       padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 5px;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
-      display: block;
       width: 80%;
     }
-
-    .delete-btn {
-      background: #ff5252;
-      color: white;
-    }
-
-    .download-btn {
-      background: #64b5f6;
-      color: white;
-      text-decoration: none;
-    }
-
-    .share-btn {
-      background: #81c784;
-      color: white;
-    }
-
-    form input, form button {
-      margin: 8px;
-      padding: 8px 10px;
-      font-size: 16px;
-    }
-
+    .delete-btn { background: #ff5252; color: white; }
+    .download-btn { background: #64b5f6; color: white; text-decoration: none; }
+    .share-btn { background: #81c784; color: white; }
     footer {
       text-align: center;
       padding: 15px;
       background-color: var(--footer-bg);
-      color: var(--text);
-    }
-
-    @media (max-width: 600px) {
-      .gallery {
-        padding: 10px;
-      }
     }
   </style>
 </head>
@@ -168,7 +109,6 @@
   <div class="gallery" id="galleryGrid"></div>
 
   <footer>© 2025 Ganesha Festival | Kumbar Bedi Street Devotees</footer>
-  <script src="language-switcher.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
   <script>
     let allImages = [];
@@ -181,12 +121,12 @@
         item.className = "gallery-item";
 
         const anchor = document.createElement("a");
-        anchor.href = "https://ganesha-backend.onrender.com" + img.url;
+        anchor.href = img.url;
         anchor.setAttribute("data-lightbox", "festival");
         anchor.setAttribute("data-title", img.caption);
 
         const image = document.createElement("img");
-        image.src = "https://ganesha-backend.onrender.com" + img.url;
+        image.src = img.url;
         image.alt = img.caption;
 
         const captionDiv = document.createElement("div");
@@ -194,7 +134,7 @@
         captionDiv.textContent = img.caption || "";
 
         const downloadBtn = document.createElement("a");
-        downloadBtn.href = "https://ganesha-backend.onrender.com" + img.url;
+        downloadBtn.href = img.url;
         downloadBtn.className = "download-btn";
         downloadBtn.download = "";
         downloadBtn.textContent = "⬇️ Download";
@@ -203,9 +143,8 @@
         shareBtn.className = "share-btn";
         shareBtn.textContent = "🔗 Share";
         shareBtn.onclick = () => {
-          const shareUrl = "https://ganesha-backend.onrender.com" + img.url;
-          navigator.clipboard.writeText(shareUrl);
-          alert("Copied to clipboard:\n" + shareUrl);
+          navigator.clipboard.writeText(img.url);
+          alert("Copied to clipboard:\n" + img.url);
         };
 
         const deleteBtn = document.createElement("button");
@@ -256,7 +195,6 @@
       localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
     }
 
-    // Load saved theme on page load
     window.addEventListener("DOMContentLoaded", () => {
       if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark");
@@ -275,10 +213,8 @@
     document.getElementById("uploadForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const formData = new FormData();
-      const imageFile = document.getElementById("imageInput").files[0];
-      const caption = document.querySelector("input[name='caption']").value;
-      formData.append("image", imageFile);
-      formData.append("caption", caption);
+      formData.append("image", document.getElementById("imageInput").files[0]);
+      formData.append("caption", document.querySelector("input[name='caption']").value);
 
       fetch("https://ganesha-backend.onrender.com/api/gallery/upload", {
         method: "POST",
