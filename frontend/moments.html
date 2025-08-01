@@ -6,17 +6,14 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
       background-color: #f0f0f5;
+      margin: 0; padding: 0;
     }
-
     h1 {
       text-align: center;
       margin-top: 30px;
       color: #333;
     }
-
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -25,26 +22,19 @@
       max-width: 1200px;
       margin: auto;
     }
-
     .image-box {
-      background-color: #fff;
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
       transition: transform 0.2s ease;
     }
-
-    .image-box:hover {
-      transform: scale(1.03);
-    }
-
+    .image-box:hover { transform: scale(1.03); }
     .image-box img {
       width: 100%;
       height: 250px;
       object-fit: cover;
-      display: block;
     }
-
     .caption {
       padding: 10px;
       font-size: 16px;
@@ -56,41 +46,35 @@
 <body>
 
   <h1>Festival Moments Wall</h1>
-
   <div class="gallery" id="gallery"></div>
 
   <script>
-    const backendURL = 'https://ganesha-backend.onrender.com';
-
-    fetch(`${backendURL}/api/gallery/moments`)
+    fetch("https://ganesha-backend.onrender.com/api/gallery/moments")
       .then(response => response.json())
       .then(data => {
         if (data.success) {
           const galleryDiv = document.getElementById('gallery');
           data.images.forEach(image => {
-            const imageBox = document.createElement('div');
-            imageBox.classList.add('image-box');
+            const box = document.createElement('div');
+            box.className = "image-box";
 
             const img = document.createElement('img');
-            img.src = image.url;  // ✅ Cloudinary URL (no need to prefix backendURL)
-            img.alt = image.caption || 'Festival Moment';
+            img.src = image.url;
+            img.alt = image.caption || "Festival Moment";
 
             const caption = document.createElement('div');
-            caption.classList.add('caption');
-            caption.textContent = image.caption || 'Untitled';
+            caption.className = "caption";
+            caption.textContent = image.caption || "Untitled";
 
-            imageBox.appendChild(img);
-            imageBox.appendChild(caption);
-
-            galleryDiv.appendChild(imageBox);
+            box.appendChild(img);
+            box.appendChild(caption);
+            galleryDiv.appendChild(box);
           });
         } else {
           console.error("Failed to fetch images");
         }
       })
-      .catch(error => {
-        console.error("Error fetching gallery data:", error);
-      });
+      .catch(error => console.error("Error fetching gallery:", error));
   </script>
 
 </body>
