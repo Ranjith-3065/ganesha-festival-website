@@ -189,40 +189,58 @@
     </section>
   </div>
   <script src="language-switcher.js"></script>
-  <script>
-    // Authentication + Dashboard Data
-    const token = localStorage.getItem("token");
+ <script>
+  const token = localStorage.getItem("token");
+  let isAdmin = false;
 
-    if (!token) {
-      alert("Welcome to dashboard");
-      
-    } else {
+  if (token) {
+    try {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      const isAdmin = decodedToken.role === "admin";
+      isAdmin = decodedToken.role === "admin";
 
+      // Show admin-only buttons
       const adminDiv = document.getElementById("adminButtons");
       if (isAdmin && adminDiv) {
         adminDiv.style.display = "flex";
-        adminDiv.style.flexWrap = "wrap";
-        adminDiv.style.gap = "15px";
       }
 
+      // Fetch summary with token
       fetch("https://ganesha-backend.onrender.com/api/summary", {
         headers: { Authorization: "Bearer " + token },
       })
-      .then((res) => res.json())
-      .then((data) => {
-        document.getElementById("donations").textContent = `₹${data.totalDonations}`;
-        document.getElementById("expenses").textContent = `₹${data.totalExpenses}`;
-        document.getElementById("balance").textContent = `₹${data.remainingBalance}`;
-      })
+      .then(res => res.json())
+      .then(data => updateSummary(data))
       .catch(() => alert("Failed to load summary"));
+    } catch (e) {
+      console.error("Invalid token:", e);
+      fetchSummaryPublic();
     }
+  } else {
+    // No token → show public summary
+    fetchSummaryPublic();
 
-    function logout() {
-      localStorage.removeItem("token");
-      window.location.href = "login.html";
-    }
+    // Hide logout button
+    document.querySelector(".logout-btn").style.display = "none";
+  }
+
+  function fetchSummaryPublic() {
+    fetch("https://ganesha-backend.onrender.com/api/summary/public")
+      .then(res => res.json())
+      .then(data => updateSummary(data))
+      .catch(() => alert("Failed to load summary"));
+  }
+
+  function updateSummary(data) {
+    document.getElementById("donations").textContent = `₹${data.totalDonations}`;
+    document.getElementById("expenses").textContent = `₹${data.totalExpenses}`;
+    document.getElementById("balance").textContent = `₹${data.remainingBalance}`;
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    window.location.reload(); // refresh instead of redirecting
+  }
+
 
     // Realistic Fireworks Animation
     const canvas = document.getElementById("fireworksCanvas");
