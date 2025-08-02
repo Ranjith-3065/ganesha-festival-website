@@ -33,5 +33,15 @@ router.get("/all", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch events" });
   }
 });
+// Public events route (no login required)
+router.get("/public", async (req, res) => {
+  try {
+    const events = await Event.find().sort({ datetime: 1 });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to load events" });
+  }
+});
+
 
 module.exports = router;
