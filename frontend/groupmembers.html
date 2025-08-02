@@ -2,52 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Festival Moments Gallery!</title>
+  <title>Our Festival Group Members</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
       background-color: #f0f0f5;
-      margin: 0; padding: 0;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 30px;
       color: #333;
     }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      color: #444;
+    }
+
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
-      padding: 30px;
+      padding: 20px;
       max-width: 1200px;
       margin: auto;
     }
-    .image-box {
-      background: #fff;
+
+    .member-card {
+      background-color: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
-      transition: transform 0.2s ease;
+      text-align: center;
+      transition: transform 0.3s ease;
     }
-    .image-box:hover { transform: scale(1.03); }
-    .image-box img {
+
+    .member-card:hover {
+      transform: scale(1.05);
+    }
+
+    .member-card img {
       width: 100%;
       height: 250px;
       object-fit: cover;
     }
+
     .caption {
-      padding: 10px;
-      font-size: 16px;
-      color: #444;
-      text-align: center;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      background: #fafafa;
     }
   </style>
 </head>
 <body>
 
-  <h1>Festival Moments Wall</h1>
-  <div class="gallery" id="gallery"></div>
-  <img src="frontend\assets\images\card.jpeg" alt="ranjith">
+  <h1>🎉 Our Festival Group Members 🎉</h1>
+
+  <div class="gallery">
+    <!-- Example Member -->
+    <div class="member-card">
+      <img src="frontend\assets\images\card.jpeg" alt="Member 1">
+      <div class="caption">Ranjith</div>
+    </div>
+
+    <!-- <div class="member-card">
+      <img src="images/members/member2.jpg" alt="Member 2">
+      <div class="caption">Ananya</div>
+    </div>
+
+    <div class="member-card">
+      <img src="images/members/member3.jpg" alt="Member 3">
+      <div class="caption">Pranav</div>
+    </div> -->
+
+    <!-- Add more members like above -->
+  </div>
 
 </body>
 </html>
