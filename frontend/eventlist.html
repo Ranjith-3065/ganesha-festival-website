@@ -70,11 +70,9 @@
       th, td {
         font-size: 14px;
       }
-
       table {
         font-size: 14px;
       }
-
       button {
         width: 100%;
       }
@@ -101,34 +99,33 @@
   <script src="language-switcher.js"></script>
   <script>
     const token = localStorage.getItem("token");
+    const url = token 
+      ? "https://ganesha-backend.onrender.com/api/event/all"
+      : "https://ganesha-backend.onrender.com/api/event/public";
 
-    if (!token) {
-      alert("Please login first.");
-      window.location.href = "login.html";
-    }
-
-    fetch("https://ganesha-backend.onrender.com/api/event/all", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    })
-    .then((res) => res.json())
-    .then((events) => {
-      const eventList = document.getElementById("eventList");
-      events.forEach(event => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${event.title}</td>
-          <td>${new Date(event.datetime).toLocaleString()}</td>
-          <td>${event.location || "—"}</td>
-          <td>${event.description || "—"}</td>
-        `;
-        eventList.appendChild(row);
+    fetch(url, token ? { headers: { Authorization: "Bearer " + token } } : {})
+      .then((res) => res.json())
+      .then((events) => {
+        const eventList = document.getElementById("eventList");
+        if (!events.length) {
+          eventList.innerHTML = `<tr><td colspan="4" style="text-align:center;">No events found</td></tr>`;
+          return;
+        }
+        events.forEach(event => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${event.title}</td>
+            <td>${new Date(event.datetime).toLocaleString()}</td>
+            <td>${event.location || "—"}</td>
+            <td>${event.description || "—"}</td>
+          `;
+          eventList.appendChild(row);
+        });
+      })
+      .catch(() => {
+        document.getElementById("eventList").innerHTML =
+          `<tr><td colspan="4" style="text-align:center;color:red;">Failed to load events.</td></tr>`;
       });
-    })
-    .catch(() => {
-      alert("Failed to load events.");
-    });
   </script>
 </body>
 </html>
