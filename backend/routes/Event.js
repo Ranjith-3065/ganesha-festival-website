@@ -19,29 +19,31 @@ router.post("/add", authMiddleware, async (req, res) => {
     await event.save();
     res.status(201).json({ message: "Event added", event });
   } catch (err) {
-    console.error(err);
+    console.error("Add Event Error:", err);
     res.status(500).json({ error: "Failed to add event", details: err.message });
   }
 });
 
-// 📅 Get all events
+// 📅 Get all events (Admin / logged-in only)
 router.get("/all", authMiddleware, async (req, res) => {
   try {
     const events = await Event.find().sort({ datetime: 1 });
     res.json(events);
   } catch (err) {
+    console.error("Fetch Events Error:", err);
     res.status(500).json({ error: "Failed to fetch events" });
   }
 });
-// Public events route (no login required)
+
+// 🌍 Public route - view events without login
 router.get("/public", async (req, res) => {
   try {
     const events = await Event.find().sort({ datetime: 1 });
     res.json(events);
   } catch (err) {
-    res.status(500).json({ error: "Failed to load events" });
+    console.error("Public Fetch Events Error:", err);
+    res.status(500).json({ error: "Failed to fetch public events" });
   }
 });
-
 
 module.exports = router;
