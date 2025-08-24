@@ -89,8 +89,8 @@
     const token = localStorage.getItem("token");
 
     if (!token) {
-      // alert("Please login first.");
-      window.location.href = "expenses.html";
+      alert("Expense list.");
+      // window.location.href = "expenses.html";
     } else {
       fetch("https://ganesha-backend.onrender.com/api/expense/all", {
         headers: {
