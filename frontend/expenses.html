@@ -89,13 +89,13 @@
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Expense list.");
-      // window.location.href = "expenses.html";
+      alert("Please login first.");
+      window.location.href = "login.html";
     } else {
       fetch("https://ganesha-backend.onrender.com/api/expense/all", {
-        // headers: {
-        //   Authorization: "Bearer " + token,
-        // },
+        headers: {
+          Authorization: "Bearer " + token,
+        },
       })
         .then(res => res.json())
         .then(data => {
