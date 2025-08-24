@@ -93,9 +93,9 @@
       // window.location.href = "expenses.html";
     } else {
       fetch("https://ganesha-backend.onrender.com/api/expense/all", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
+        // headers: {
+        //   Authorization: "Bearer " + token,
+        // },
       })
         .then(res => res.json())
         .then(data => {
