@@ -92,13 +92,13 @@
       alert("Please login first.");
       window.location.href = "login.html";
     } else {
-      fetch("https://ganesha-backend.onrender.com/api/expense/all", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-        .then(res => res.json())
-        .then(data => {
+    const url = token 
+      ? "https://ganesha-backend.onrender.com/api/expense/all"
+      : "https://ganesha-backend.onrender.com/api/expense/public";
+
+    fetch(url, token ? { headers: { Authorization: "Bearer " + token } } : {})
+      .then((res) => res.json())
+      .then((data) => {
           const container = document.getElementById("expensesList");
           data.forEach(e => {
             const card = document.createElement("div");
