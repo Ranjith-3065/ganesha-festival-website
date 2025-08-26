@@ -21,7 +21,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 });
 
 // ✅ View all expenses
-router.get("/all", authMiddleware, async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const expenses = await Expense.find().sort({ date: -1 });
     res.json(expenses);
