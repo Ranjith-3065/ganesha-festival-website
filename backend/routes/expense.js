@@ -21,7 +21,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 });
 
 // ✅ View all expenses
-router.get("/all", async (req, res) => {
+router.get("/all", authMiddleware, async (req, res) => {
   try {
     const expenses = await Expense.find().sort({ date: -1 });
     res.json(expenses);
@@ -30,4 +30,13 @@ router.get("/all", async (req, res) => {
   }
 });
 
+
+router.get("/public", async (req, res) => {
+  try {
+    const expenses = await Expense.find().sort({ date: -1 });
+    res.json(expenses);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch expenses" });
+  }
+});
 module.exports = router;
